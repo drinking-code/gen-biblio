@@ -3,11 +3,23 @@
 const open = require('open')
 const handler = require('serve-handler')
 const http = require('http')
+const path = require('path')
 const fs = require('fs')
 const {handleCurrentFile} = require('./server/current')
 const {handleEntry} = require('./server/entry')
 
 const cwd = process.cwd()
+
+const publicFolder = (() => {
+    let dirname = path.dirname((new URL('file://' + __filename)).pathname)
+    while (!fs.readdirSync(dirname).includes('package.json'))
+        dirname = path.join(dirname, '..')
+    const publicInNodeModulesPath = path.join(dirname, 'node_modules', 'gen-biblio', 'public')
+    if (fs.existsSync(publicInNodeModulesPath))
+        return publicInNodeModulesPath
+    else
+    return path.join(dirname, 'public')
+})()
 
 const server = http.createServer((req, res) => {
     try {
@@ -17,7 +29,7 @@ const server = http.createServer((req, res) => {
             return handleEntry(req, res)
         } else {
             return handler(req, res, {
-                public: 'public',
+                public: publicFolder,
                 cleanUrls: true
             })
         }

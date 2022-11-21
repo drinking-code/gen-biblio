@@ -21,7 +21,7 @@ function handleEntry(req, res) {
 
                 addEntry(body.id, {
                     type: body.type,
-                    doi: body.doi,
+                    doi: body.doi.replace(/^(https?:\/\/(www\.)?doi\.org\/)?(.+)/, '$3'),
                 })
                 addRenderedEntry({
                     id: body.id,
