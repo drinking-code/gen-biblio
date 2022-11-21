@@ -23,7 +23,7 @@ class Table {
         if (missingColumns.size > 0)
             throw new Error(`Missing column values: ${Array.from(missingColumns).join(', ')}.`)
         if (!id)
-            id = self.crypto.randomUUID()
+            id = window.crypto.randomUUID()
         this.entryElements[id] = element('tr', {
             children: Array.from(Object.entries(entries))
                 .sort(([keyA], [keyB]) =>

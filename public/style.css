@@ -30,6 +30,8 @@ body {
     top: 2px;
     right: .5em;
 
+    color: #000;
+
     opacity: .5;
 }
 
@@ -58,9 +60,21 @@ table, th, td {
     border: 1px solid lightgrey;
 }
 
+td {
+    max-width: 10em;
+}
+
+td.loading {
+    background: url('/img/loading-black.svg') center left / 1em no-repeat;
+}
+
 @media (prefers-color-scheme: dark) {
     table, th, td {
         border: 1px solid dimgray;
+    }
+
+    td.loading {
+        background-image: url('/img/loading-white.svg');
     }
 }
 

@@ -4,40 +4,17 @@ const open = require('open')
 const handler = require('serve-handler')
 const http = require('http')
 const fs = require('fs')
+const {handleCurrentFile} = require('./server/current')
+const {handleEntry} = require('./server/entry')
 
 const cwd = process.cwd()
-let loadedBibliography = null
-if (process.argv[2])
-    loadedBibliography = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'))
 
 const server = http.createServer((req, res) => {
     try {
         if (req.url === '/current') {
-            if (req.method.toLowerCase() === 'get') {
-                if (loadedBibliography === null) {
-                    res.statusCode = 404
-                    return res.end()
-                } else {
-                    res.write(JSON.stringify(loadedBibliography))
-                    return res.end()
-                }
-            } else if (req.method.toLowerCase() === 'put') {
-                let filename = ''
-                req.on('data', (chunk) => filename += chunk)
-                req.on('end', () => {
-                    filename += '.json'
-                    if (fs.existsSync(filename)) {
-                        res.statusCode = 409
-                        return res.end()
-                    }
-                    const emptyData = {}
-                    loadedBibliography = emptyData
-                    const emptyDataString = JSON.stringify(emptyData)
-                    fs.writeFileSync(filename, emptyDataString, 'utf8')
-                    res.write(emptyDataString)
-                    return res.end()
-                })
-            }
+            return handleCurrentFile(req, res)
+        } else if (req.url === '/entry') {
+            return handleEntry(req, res)
         } else {
             return handler(req, res, {
                 public: 'public',
