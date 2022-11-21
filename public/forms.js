@@ -1,7 +1,6 @@
 function makeNoLoadedFileForm() {
-    const submitButton = element('button', {
-        innerText: 'Create new file'
-    })
+    clearBody()
+    const submitButton = element('button', {innerText: 'Create new file'})
     const fileNameInput = element('input')
     pressButtonOnEnter(fileNameInput, submitButton)
     element('div', {
@@ -20,5 +19,21 @@ function makeNoLoadedFileForm() {
 }
 
 function makeFileLoadedForm(data) {
-    console.log(data)
+    clearBody()
+    const submitButton = element('button', {innerText: 'Add new entry'})
+    const fileNameInput = element('input', {placeholder: 'doi'})
+    pressButtonOnEnter(fileNameInput, submitButton)
+    const inputTypes = {
+        'doi': element('div', {
+            children: [fileNameInput, submitButton]
+        }),
+        'custom (book, article without doi, etc.)': element('div', {})
+    }
+
+    const newThingSection = tabs(inputTypes)
+    document.body.append(newThingSection)
+
+    const optionsSection = element('div', {
+        children: []
+    }, document.body)
 }

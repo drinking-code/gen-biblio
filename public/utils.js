@@ -31,6 +31,46 @@ function element(tag, attributes, appendTo) {
     return el
 }
 
+function tabs(data) {
+    Array.from(Object.values(data)).forEach((el, i) => {
+        if (i === 0) return
+        el.style.display = 'none'
+    })
+    const tabElements = Array.from(Object.entries(data))
+        .map(([key], i) => {
+            const radio = element('input', {type: 'radio'})
+            if (i === 0)
+                radio.checked = true
+            radio.addEventListener('input', () => select(key))
+            return element('label', {
+                children: [radio, element('span', {innerText: key})],
+            })
+        })
+
+    function select(keyToSelect) {
+        Array.from(Object.entries(data)).forEach(([key, element], i) => {
+            if (keyToSelect === key) {
+                tabElements[i].querySelector('input').checked = true
+                element.style.display = ''
+            } else {
+                tabElements[i].querySelector('input').checked = false
+                element.style.display = 'none'
+            }
+        })
+    }
+
+    return element('div', {
+        children: [
+            element('div', {children: tabElements}),
+            ...Array.from(Object.values(data))
+        ]
+    })
+}
+
+function clearBody() {
+    document.body.innerHTML = ''
+}
+
 function pressButtonOnEnter(input, button) {
     input.addEventListener('keydown', e => {
         if (e.key !== 'Enter') return
