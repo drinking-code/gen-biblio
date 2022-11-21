@@ -1,0 +1,16 @@
+{
+  "name": "gen-biblio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "gen-biblio": "./index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "open": "^8.4.0",
+    "serve-handler": "^6.1.5"
+  }
+}
