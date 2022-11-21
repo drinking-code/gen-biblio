@@ -21,13 +21,13 @@ function makeNoLoadedFileForm() {
 function makeFileLoadedForm(data) {
     clearBody()
     const submitButton = element('button', {innerText: 'Add new entry'})
-    const fileNameInput = element('input', {placeholder: 'doi'})
+    const fileNameInput = element('input', {placeholder: 'DOI'})
     pressButtonOnEnter(fileNameInput, submitButton)
     const inputTypes = {
-        'doi': element('div', {
+        'DOI': element('div', {
             children: [fileNameInput, submitButton]
         }),
-        'custom (book, article without doi, etc.)': element('div', {})
+        'Custom (Book, Article without DOI, etc.)': element('div', {})
     }
 
     const newThingSection = makeTabs(inputTypes, {className: 'input-section'})
@@ -58,8 +58,22 @@ function makeFileLoadedForm(data) {
     const optionsSection = element('div', {
         className: 'input-section',
         children: [
-            makeOption('locale', locales, defaultLocale),
-            makeOption('style', styles, defaultStyle),
+            makeOption('Locale', locales, defaultLocale),
+            makeOption('Style', styles, defaultStyle),
         ]
     }, document.body)
+
+    const entryTable = new Table(['Entry Text', 'DOI'])
+
+    const entriesSections = element('div', {
+        className: 'entries',
+        children: [
+            entryTable.element,
+        ]
+    }, document.body)
+
+    entryTable.addEntry({
+        'DOI': Table.defer,
+        'Entry Text': 'Test',
+    })
 }
