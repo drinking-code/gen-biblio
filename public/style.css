@@ -1,0 +1,18 @@
+.suffix-json {
+    position: relative;
+    display: inline-block;
+}
+
+.suffix-json:after {
+    content: '.json';
+
+    position: absolute;
+    top: 2px;
+    right: .5em;
+
+    opacity: .5;
+}
+
+.suffix-json input {
+    padding-right: 4em;
+}
