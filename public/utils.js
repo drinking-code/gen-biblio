@@ -31,7 +31,7 @@ function element(tag, attributes, appendTo) {
     return el
 }
 
-function tabs(data) {
+function makeTabs(data, attributes) {
     Array.from(Object.values(data)).forEach((el, i) => {
         if (i === 0) return
         el.style.display = 'none'
@@ -43,6 +43,7 @@ function tabs(data) {
                 radio.checked = true
             radio.addEventListener('input', () => select(key))
             return element('label', {
+                className: 'tab',
                 children: [radio, element('span', {innerText: key})],
             })
         })
@@ -60,6 +61,7 @@ function tabs(data) {
     }
 
     return element('div', {
+        ...attributes,
         children: [
             element('div', {children: tabElements}),
             ...Array.from(Object.values(data))

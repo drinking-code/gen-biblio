@@ -30,10 +30,36 @@ function makeFileLoadedForm(data) {
         'custom (book, article without doi, etc.)': element('div', {})
     }
 
-    const newThingSection = tabs(inputTypes)
+    const newThingSection = makeTabs(inputTypes, {className: 'input-section'})
     document.body.append(newThingSection)
 
+    const defaultLocale = 'en-GB'
+    const defaultStyle = 'apa'
+
+    function makeOption(label, options, defaultOption) {
+        return element('label', {
+            children: [
+                element('span', {innerText: label}),
+                element('select', {
+                    children: options.map(option => {
+                        const optionElement = element('option', {
+                            innerText: option,
+                            value: option,
+                        })
+                        if (defaultOption === option)
+                            optionElement.selected = true
+                        return optionElement
+                    })
+                })
+            ]
+        })
+    }
+
     const optionsSection = element('div', {
-        children: []
+        className: 'input-section',
+        children: [
+            makeOption('locale', locales, defaultLocale),
+            makeOption('style', styles, defaultStyle),
+        ]
     }, document.body)
 }
