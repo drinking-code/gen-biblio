@@ -11,6 +11,13 @@ body {
     grid-auto-rows: min-content min-content 1fr;
 }
 
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #1c1c1c;
+        color: #ddd;
+    }
+}
+
 .suffix-json {
     position: relative;
     display: inline-block;
@@ -42,8 +49,24 @@ body {
     overflow-y: auto;
 }
 
+.entries table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid lightgrey;
+}
+
+@media (prefers-color-scheme: dark) {
+    table, th, td {
+        border: 1px solid dimgray;
+    }
+}
+
 .entries thead th {
     position: sticky;
     top: 0;
     z-index: 1;
+    text-align: left;
 }

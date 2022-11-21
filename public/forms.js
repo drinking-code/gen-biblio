@@ -63,7 +63,7 @@ function makeFileLoadedForm(data) {
         ]
     }, document.body)
 
-    const entryTable = new Table(['Entry Text', 'DOI'])
+    const entryTable = new Table(['Entry Text', 'DOI', 'Options'])
 
     const entriesSections = element('div', {
         className: 'entries',
@@ -71,9 +71,4 @@ function makeFileLoadedForm(data) {
             entryTable.element,
         ]
     }, document.body)
-
-    entryTable.addEntry({
-        'DOI': Table.defer,
-        'Entry Text': 'Test',
-    })
 }

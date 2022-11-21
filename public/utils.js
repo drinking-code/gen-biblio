@@ -69,37 +69,6 @@ function makeTabs(data, attributes) {
     })
 }
 
-class Table {
-    static defer = Symbol('table.defer')
-
-    constructor(columns) {
-        this.columns = columns
-        this.entries = []
-        this.element = element('table', {
-            children: element('thead', {
-                children: element('tr', {
-                    children: this.columns.map(columnName => element('th', {innerText: columnName}))
-                })
-            })
-        })
-    }
-
-    addEntry(entries) {
-        const missingColumns = new Set([...this.columns])
-        Array.from(Object.keys(entries)).forEach(key => {
-            if (!missingColumns.has(key)) throw new Error(`Column ${key} does not exist.`)
-            missingColumns.delete(key)
-        })
-        element('tr', {
-            children: Array.from(Object.entries(entries))
-                .sort(([keyA], [keyB]) =>
-                    this.columns.indexOf(keyA) - this.columns.indexOf(keyB)
-                )
-                .map(([key, value]) => element('td', {innerText: value.toString()}))
-        }, this.element)
-    }
-}
-
 function clearBody() {
     document.body.innerHTML = ''
 }
