@@ -56,6 +56,13 @@ function updateEntry({id, hidden}) {
     })
 }
 
+function removeEntry(id) {
+    return genericRequest('/entry', {
+        method: 'DELETE',
+        body: JSON.stringify({id})
+    })
+}
+
 function getFormattedEntry({id, style, locale}) {
     return genericRequest(`/entry/${id}`, {
         headers: {

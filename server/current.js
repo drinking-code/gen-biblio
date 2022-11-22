@@ -115,10 +115,27 @@ function getEntry(id) {
 }
 
 /**
+ * @param {string} id
+ * */
+function removeEntry(id) {
+    delete loadedBibliography.entries[id]
+    loadedBibliography.rendered = loadedBibliography.rendered.filter(entry => entry.id !== id)
+}
+
+/**
  * @param {BibliographyRenderedEntry} entry
  * */
 function addRenderedEntry(entry) {
     loadedBibliography.rendered.push(entry)
 }
 
-module.exports = {handleCurrentFile, handleSettings, writeFile, addEntry, getEntry, addRenderedEntry, searchEntries}
+module.exports = {
+    handleCurrentFile,
+    handleSettings,
+    writeFile,
+    addEntry,
+    getEntry,
+    removeEntry,
+    addRenderedEntry,
+    searchEntries
+}

@@ -1,4 +1,4 @@
-const {writeFile, addEntry, addRenderedEntry, getEntry, searchEntries} = require('./current')
+const {writeFile, addEntry, removeEntry, addRenderedEntry, getEntry, searchEntries} = require('./current')
 
 async function handleEntry(req, res) {
     if (req.method.toLowerCase() === 'put') {
@@ -53,6 +53,16 @@ async function handleEntry(req, res) {
                 entry.hidden = data.hidden
 
             addEntry(data.id, entry)
+            writeFile()
+            res.statusCode = 201
+            return res.end()
+        })
+    } else if (req.method.toLowerCase() === 'delete') {
+        let dataRaw = ''
+        req.on('data', (chunk) => dataRaw += chunk)
+        req.on('end', () => {
+            const data = JSON.parse(dataRaw)
+            removeEntry(data.id)
             writeFile()
             res.statusCode = 201
             return res.end()

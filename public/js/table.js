@@ -69,6 +69,12 @@ class Table {
         return id
     }
 
+    removeEntry(id) {
+        this.entryElements[id].remove()
+        delete this.entryElements[id]
+        delete this.entries[id]
+    }
+
     markEntry(id, mark) {
         this.entryElements[id].className = mark
     }
