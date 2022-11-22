@@ -31,31 +31,52 @@ function makeFileLoadedForm(data) {
         'Custom (Book, Article without DOI, etc.)': element('div', {})
     }
 
-    function newOptions() {
+    function newOptions(id) {
+        const hideButtonStates = ['Don\'t output', 'Do output']
+        const hideButton = element('button', {
+            innerText: hideButtonStates[0]
+        })
+        hideButton.addEventListener('click', async () => {
+            hideButton.style.pointerEvents = 'none'
+            const isNowHidden = !hideButtonStates.indexOf(hideButton.innerText)
+            entryTable.markEntry(id, isNowHidden ? 'hidden' : '')
+            await updateEntry({id, hidden: isNowHidden})
+            hideButton.innerText = hideButtonStates[Number(isNowHidden)]
+            hideButton.style.pointerEvents = ''
+        })
         return [
             element('button', {
                 innerText: 'Delete'
             }),
-            element('button', {
-                innerText: 'Don\'t output'
-            }),
+            hideButton,
         ]
     }
 
     submitButton.addEventListener('click', async () => {
         const id = window.crypto.randomUUID()
         entryTable.addEntry({
-            'Options': newOptions(),
+            'Options': newOptions(id),
             'DOI': doiInput.value.replace(/^(https?:\/\/(www\.)?doi\.org\/)?(.+)/, '$3'),
             [citationColumnName]: Table.defer,
         }, id)
-        const data = await addEntry({
+        const entryData = await addEntry({
             id,
             doi: doiInput.value,
             style: styleElement.value,
             locale: localeElement.value,
         })
-        entryTable.fill(id, citationColumnName, data.formattedCitation)
+        entryTable.fill(id, citationColumnName, entryData.formattedCitation)
+        data.entries[id] = {
+            type: 'doi',
+            doi: doiInput.value
+        }
+        data.rendered.push({
+            id,
+            style: styleElement.value,
+            locale: localeElement.value,
+            formattedCitation: entryData.formattedCitation,
+        })
+        doiInput.value = ''
     })
 
     const newThingSection = makeTabs(inputTypes, {className: 'input-section'})
@@ -116,13 +137,19 @@ function makeFileLoadedForm(data) {
         if (formatted)
             citation = formatted.formattedCitation
         entryTable.addEntry({
-            'Options': newOptions(),
+            'Options': newOptions(id),
             'DOI': entry.doi,
             [citationColumnName]: citation,
         }, id)
         if (!formatted) {
             citation = await getFormattedEntry({id, locale: localeElement.value, style: styleElement.value})
-            entryTable.fill(id, citationColumnName, citation)
+            if (citation?.formattedCitation === false)
+                entryTable.fill(id, citationColumnName, element('span', {
+                    className: 'error',
+                    innerText: 'Error: Something went wrong on the api.crossref.org server',
+                }))
+            else
+                entryTable.fill(id, citationColumnName, citation.formattedCitation)
         }
     })
 

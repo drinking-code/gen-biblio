@@ -4,6 +4,7 @@ const fs = require('fs')
  * @typedef {Object} BibliographyEntry
  * @property {'doi'} type
  * @property {string} [doi]
+ * @property {boolean} hidden
  * */
 /**
  * @typedef {Object} BibliographyRenderedEntry
@@ -103,10 +104,17 @@ function addEntry(id, entry) {
 }
 
 /**
+ * @param {string} id
+ * */
+function getEntry(id) {
+    return loadedBibliography.entries[id]
+}
+
+/**
  * @param {BibliographyRenderedEntry} entry
  * */
 function addRenderedEntry(entry) {
     loadedBibliography.rendered.push(entry)
 }
 
-module.exports = {handleCurrentFile, handleSettings, writeFile, addEntry, addRenderedEntry}
+module.exports = {handleCurrentFile, handleSettings, writeFile, addEntry, getEntry, addRenderedEntry}

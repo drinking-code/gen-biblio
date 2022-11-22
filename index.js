@@ -18,14 +18,14 @@ const publicFolder = (() => {
     if (fs.existsSync(publicInNodeModulesPath))
         return publicInNodeModulesPath
     else
-    return path.join(dirname, 'public')
+        return path.join(dirname, 'public')
 })()
 
 const server = http.createServer((req, res) => {
     try {
         if (req.url === '/current') {
             return handleCurrentFile(req, res)
-        } else if (req.url === '/entry') {
+        } else if (req.url.startsWith('/entry')) {
             return handleEntry(req, res)
         } else if (req.url === '/settings') {
             return handleSettings(req, res)

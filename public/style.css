@@ -89,3 +89,13 @@ td.loading {
     z-index: 1;
     text-align: left;
 }
+
+.error {
+    color: red;
+}
+
+@media (prefers-color-scheme: dark) {
+    .error {
+        color: #ff4141;
+    }
+}
