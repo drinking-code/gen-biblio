@@ -5,7 +5,7 @@ const handler = require('serve-handler')
 const http = require('http')
 const path = require('path')
 const fs = require('fs')
-const {handleCurrentFile} = require('./server/current')
+const {handleCurrentFile, handleSettings} = require('./server/current')
 const {handleEntry} = require('./server/entry')
 
 const cwd = process.cwd()
@@ -27,6 +27,8 @@ const server = http.createServer((req, res) => {
             return handleCurrentFile(req, res)
         } else if (req.url === '/entry') {
             return handleEntry(req, res)
+        } else if (req.url === '/settings') {
+            return handleSettings(req, res)
         } else {
             return handler(req, res, {
                 public: publicFolder,

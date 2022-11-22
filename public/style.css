@@ -64,6 +64,11 @@ td {
     max-width: 10em;
 }
 
+tr td:last-child {
+    width: 1%;
+    white-space: nowrap;
+}
+
 td.loading {
     background: url('/img/loading-black.svg') center left / 1em no-repeat;
 }

@@ -32,15 +32,23 @@ function makeFileLoadedForm(data) {
     }
 
     function newOptions() {
-        return Table.defer
+        return [
+            element('button', {
+                innerText: 'Delete'
+            }),
+            element('button', {
+                innerText: 'Don\'t output'
+            }),
+        ]
     }
 
     submitButton.addEventListener('click', async () => {
-        const id = entryTable.addEntry({
+        const id = window.crypto.randomUUID()
+        entryTable.addEntry({
             'Options': newOptions(),
             'DOI': doiInput.value.replace(/^(https?:\/\/(www\.)?doi\.org\/)?(.+)/, '$3'),
             [citationColumnName]: Table.defer,
-        })
+        }, id)
         const data = await addEntry({
             id,
             doi: doiInput.value,
@@ -53,30 +61,42 @@ function makeFileLoadedForm(data) {
     const newThingSection = makeTabs(inputTypes, {className: 'input-section'})
     document.body.append(newThingSection)
 
-    const defaultLocale = 'en-GB'
-    const defaultStyle = 'apa'
+    const defaultLocale = data.settings.locale
+    const defaultStyle = data.settings.style
 
-    function makeOption(label, options, defaultOption) {
+    function makeOption(label, options, defaultOption, changeEventListener) {
+        const selectElement = element('select', {
+            children: options.map(option => {
+                const optionElement = element('option', {
+                    innerText: option,
+                    value: option,
+                })
+                if (defaultOption === option)
+                    optionElement.selected = true
+                return optionElement
+            })
+        })
+        if (changeEventListener)
+            selectElement.addEventListener('change', changeEventListener)
+
         return element('label', {
             children: [
                 element('span', {innerText: label}),
-                element('select', {
-                    children: options.map(option => {
-                        const optionElement = element('option', {
-                            innerText: option,
-                            value: option,
-                        })
-                        if (defaultOption === option)
-                            optionElement.selected = true
-                        return optionElement
-                    })
-                })
+                selectElement
             ]
         })
     }
 
-    const localeLabel = makeOption('Locale', locales, defaultLocale)
-    const styleLabel = makeOption('Style', styles, defaultStyle)
+    const localeLabel = makeOption('Locale', locales, defaultLocale, e => {
+        const localeInputElement = e.target
+        sendSetting('locale', localeInputElement.value)
+        // grey out formatted
+    })
+    const styleLabel = makeOption('Style', styles, defaultStyle, e => {
+        const styleInputElement = e.target
+        sendSetting('style', styleInputElement.value)
+        // grey out formatted
+    })
     const localeElement = localeLabel.querySelector('select')
     const styleElement = styleLabel.querySelector('select')
     const optionsSection = element('div', {
@@ -96,7 +116,7 @@ function makeFileLoadedForm(data) {
         if (formatted)
             citation = formatted.formattedCitation
         entryTable.addEntry({
-            'Options': Table.defer,
+            'Options': newOptions(),
             'DOI': entry.doi,
             [citationColumnName]: citation,
         }, id)
@@ -105,7 +125,6 @@ function makeFileLoadedForm(data) {
             entryTable.fill(id, citationColumnName, citation)
         }
     })
-
 
     const entriesSections = element('div', {
         className: 'entries',

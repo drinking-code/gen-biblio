@@ -34,8 +34,10 @@ class Table {
                         return element('td', {
                             className: 'loading'
                         })
-                    } else {
+                    } else if (typeof value === 'string') {
                         return element('td', {innerText: value.toString()})
+                    } else {
+                        return element('td', {children: value})
                     }
                 })
         }, this.element)
@@ -56,7 +58,12 @@ class Table {
         this.entries[id][column] = value
         const columnIndex = this.columns.indexOf(column)
         const cellElement = Array.from(this.entryElements[id].children)[columnIndex]
-        cellElement.innerText = value
+        if (typeof value === 'string') {
+            cellElement.innerText = value
+        } else {
+            cellElement.innerHTML = ''
+            cellElement.append(value)
+        }
         cellElement.classList.remove('loading')
     }
 }

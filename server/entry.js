@@ -17,6 +17,7 @@ function handleEntry(req, res) {
                     responseData.formattedCitation = await response.text()
                 }).catch(err => console.log("Unable to fetch -", err))
 
+                res.setHeader('Content-Type', 'application/json')
                 res.write(JSON.stringify(responseData))
 
                 addEntry(body.id, {
