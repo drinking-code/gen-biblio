@@ -1,17 +1,39 @@
 class Table {
     static defer = Symbol('table.defer')
 
-    constructor(columns) {
+    constructor(columns, sortable = []) {
         this.columns = columns
         this.entries = {}
         this.entryElements = {}
         this.element = element('table', {
             children: element('thead', {
                 children: element('tr', {
-                    children: this.columns.map(columnName => element('th', {innerText: columnName}))
+                    children: this.columns.map(columnName => {
+                        const header = element('th', {
+                            className: [
+                                sortable[0] === columnName && 'sorted',
+                                sortable.includes(columnName) && 'sortable'
+                            ].filter(v => v).join(' '),
+                            innerText: columnName,
+                        })
+                        if (sortable.includes(columnName))
+                            header.addEventListener('click', () => {
+                                if (header.classList.contains('sorted')) {
+                                    header.classList.toggle('reversed')
+                                } else {
+                                    Array.from(header.parentNode.children)
+                                        .forEach(el => el.classList.remove('sorted', 'reversed'))
+                                    header.classList.add('sorted')
+                                }
+                                this.sort(columnName, header.classList.contains('reversed'))
+                            })
+                        return header
+                    })
                 })
             })
         })
+        this.sortedBy = sortable[0]
+        this.sortedReverse = false
     }
 
     addEntry(entries, id) {
@@ -42,6 +64,8 @@ class Table {
                 })
         }, this.element)
         this.entries[id] = entries
+
+        this.sort(this.sortedBy, this.sortedReverse)
         return id
     }
 
@@ -80,7 +104,18 @@ class Table {
         })
     }
 
-    sort(column, reverse = false, alphabet) {
-
+    sort(column, reverse = false) {
+        this.sortedBy = column
+        this.sortedReverse = reverse
+        let sorted = Array.from(Object.entries(this.entries)).sort(([idA, entryA], [idB, entryB]) => {
+            return entryA[column].localeCompare(entryB[column])
+        })
+        if (reverse)
+            sorted = sorted.reverse()
+        const sortedIds = sorted.map(([id, entry]) => id)
+        Object.values(this.entryElements).forEach(el => el.remove())
+        sortedIds.forEach(id => {
+            this.element.append(this.entryElements[id])
+        })
     }
 }

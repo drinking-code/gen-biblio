@@ -90,6 +90,39 @@ td.loading {
     text-align: left;
 }
 
+.entries thead th.sortable:after {
+    content: '';
+
+    position: absolute;
+    top: 0;
+    right: .2rem;
+    height: 100%;
+    width: 1em;
+
+    background: url('/img/arrows-black.svg') center no-repeat;
+
+    opacity: .7;
+}
+
+.entries thead th.sortable.sorted:after {
+    background-image: url('/img/arrows-single-black.svg');
+    transform: rotate(180deg);
+}
+
+.entries thead th.sortable.sorted.reversed:after {
+    transform: rotate(0deg);
+}
+
+@media (prefers-color-scheme: dark) {
+    .entries thead th.sortable:after {
+        background-image: url('/img/arrows-white.svg');
+    }
+
+    .entries thead th.sortable.sorted:after {
+        background-image: url('/img/arrows-single-white.svg');
+    }
+}
+
 .entries tr.hidden {
     color: rgba(0,0,0,.5);
 }

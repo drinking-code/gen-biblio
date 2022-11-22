@@ -139,7 +139,7 @@ function makeFileLoadedForm(data) {
         ]
     }, document.body)
 
-    const entryTable = new Table([citationColumnName, 'DOI', 'Options'])
+    const entryTable = new Table([citationColumnName, 'DOI', 'Options'], [citationColumnName, 'DOI'])
     Array.from(Object.entries(data.entries)).forEach(async ([id, entry]) => {
         const formatted = data.rendered.find(entry => {
             return !(entry.id !== id || entry.locale !== localeElement.value || entry.style !== styleElement.value)

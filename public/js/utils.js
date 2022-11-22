@@ -20,6 +20,7 @@ function element(tag, attributes, appendTo) {
                 el.appendChild(attributes[key])
             }
         } else if (key === 'className') {
+            if (attributes[key] === '') continue
             el.classList.add(...attributes[key].split(' '))
         } else {
             el.setAttribute(key, attributes[key])
