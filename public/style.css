@@ -90,6 +90,16 @@ td.loading {
     text-align: left;
 }
 
+.entries tr.hidden {
+    color: rgba(0,0,0,.5);
+}
+
+@media (prefers-color-scheme: dark) {
+    .entries tr.hidden {
+        color: rgba(221, 221, 221, .5);
+    }
+}
+
 .error {
     color: red;
 }

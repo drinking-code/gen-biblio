@@ -31,10 +31,10 @@ function makeFileLoadedForm(data) {
         'Custom (Book, Article without DOI, etc.)': element('div', {})
     }
 
-    function newOptions(id) {
+    function newOptions(id, {hidden}) {
         const hideButtonStates = ['Don\'t output', 'Do output']
         const hideButton = element('button', {
-            innerText: hideButtonStates[0]
+            innerText: hideButtonStates[Number(hidden)]
         })
         hideButton.addEventListener('click', async () => {
             hideButton.style.pointerEvents = 'none'
@@ -137,10 +137,12 @@ function makeFileLoadedForm(data) {
         if (formatted)
             citation = formatted.formattedCitation
         entryTable.addEntry({
-            'Options': newOptions(id),
+            'Options': newOptions(id, {hidden: entry.hidden}),
             'DOI': entry.doi,
             [citationColumnName]: citation,
         }, id)
+        if (entry.hidden)
+            entryTable.markEntry(id, 'hidden')
         if (!formatted) {
             citation = await getFormattedEntry({id, locale: localeElement.value, style: styleElement.value})
             if (citation?.formattedCitation === false)

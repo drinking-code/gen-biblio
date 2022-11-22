@@ -45,6 +45,10 @@ class Table {
         return id
     }
 
+    markEntry(id, mark) {
+        this.entryElements[id].className = mark
+    }
+
     fill(id, column, value) {
         if (!this.entries.hasOwnProperty(id))
             throw new Error(`Entry with id ${id} does not exist.`)

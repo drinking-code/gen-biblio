@@ -44,8 +44,10 @@ async function handleEntry(req, res) {
         req.on('end', () => {
             const data = JSON.parse(dataRaw)
             const entry = getEntry(data.id)
-            if (data.hidden)
+            if (typeof data.hidden === 'boolean')
                 entry.hidden = data.hidden
+
+            addEntry(data.id, entry)
             writeFile()
             res.statusCode = 201
             return res.end()
