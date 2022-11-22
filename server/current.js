@@ -95,6 +95,10 @@ function writeFile() {
     fs.writeFileSync(loadedBibliographyFileName, JSON.stringify(loadedBibliography), 'utf8')
 }
 
+function searchEntries(callback) {
+    return Array.from(Object.values(loadedBibliography.entries)).find(callback)
+}
+
 /**
  * @param {string} id
  * @param {BibliographyEntry} entry
@@ -117,4 +121,4 @@ function addRenderedEntry(entry) {
     loadedBibliography.rendered.push(entry)
 }
 
-module.exports = {handleCurrentFile, handleSettings, writeFile, addEntry, getEntry, addRenderedEntry}
+module.exports = {handleCurrentFile, handleSettings, writeFile, addEntry, getEntry, addRenderedEntry, searchEntries}

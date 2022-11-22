@@ -70,4 +70,17 @@ class Table {
         }
         cellElement.classList.remove('loading')
     }
+
+    hasInColumn(column, value) {
+        if (this.columns.indexOf(column) === -1)
+            throw new Error(`Column ${column} does not exist.`)
+
+        return Array.from(Object.values(this.entries)).find(entry => {
+            return entry[column] === value
+        })
+    }
+
+    sort(column, reverse = false, alphabet) {
+
+    }
 }

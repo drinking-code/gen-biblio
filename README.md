@@ -1,7 +1,7 @@
 # Generate Bibliographies
 
 So, I use pages and find it repugnant that one has to purchase a more-than-200-euros expensive program to create a
-bibliography. That's why I made this, a small library that does that, but free (and probably not as well).
+bibliography. That's why I bodged together this; a small library that does that, but free (and probably not as well).
 
 ## Usage
 

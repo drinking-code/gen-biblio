@@ -31,7 +31,13 @@ function makeFileLoadedForm(data) {
         'Custom (Book, Article without DOI, etc.)': element('div', {})
     }
 
-    function newOptions(id, {hidden}) {
+    function newOptions(id, options) {
+        const {
+            hidden
+        } = {
+            hidden: false,
+            ...options
+        }
         const hideButtonStates = ['Don\'t output', 'Do output']
         const hideButton = element('button', {
             innerText: hideButtonStates[Number(hidden)]
@@ -54,9 +60,14 @@ function makeFileLoadedForm(data) {
 
     submitButton.addEventListener('click', async () => {
         const id = window.crypto.randomUUID()
+        const pureDOI = doiInput.value.replace(/^(https?:\/\/(www\.)?doi\.org\/)?(.+)/, '$3')
+        if (entryTable.hasInColumn('DOI', pureDOI)) {
+            doiInput.value = ''
+            return alert('This DOI already exists')
+        }
         entryTable.addEntry({
             'Options': newOptions(id),
-            'DOI': doiInput.value.replace(/^(https?:\/\/(www\.)?doi\.org\/)?(.+)/, '$3'),
+            'DOI': pureDOI,
             [citationColumnName]: Table.defer,
         }, id)
         const entryData = await addEntry({

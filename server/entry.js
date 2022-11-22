@@ -1,4 +1,4 @@
-const {writeFile, addEntry, addRenderedEntry, getEntry} = require('./current')
+const {writeFile, addEntry, addRenderedEntry, getEntry, searchEntries} = require('./current')
 
 async function handleEntry(req, res) {
     if (req.method.toLowerCase() === 'put') {
@@ -7,6 +7,11 @@ async function handleEntry(req, res) {
         req.on('end', async () => {
             const body = JSON.parse(bodyRaw)
             if (body.type === 'doi') {
+                if (searchEntries(entry => entry.doi === body.doi)) {
+                    res.statusCode = 409
+                    return res.end()
+                }
+
                 const responseData = {}
                 responseData.formattedCitation = await getFormattedCitationFromDOI(body.doi, body.id, body.style, body.locale)
 
