@@ -76,6 +76,10 @@ body {
     align-items: center;
 }
 
+.set-left {
+    margin-left: auto;
+}
+
 .entries {
     overflow-y: auto;
 }

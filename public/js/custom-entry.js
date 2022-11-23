@@ -1,6 +1,11 @@
 function makeCustomEntryInputs(makeOption) {
     const addButton = element('button', {innerText: 'Add author'})
 
+    addButton.addEventListener('click', () => {
+        const lastAuthorEntryElement = addButton.parentNode.querySelector('.author:last-of-type')
+        lastAuthorEntryElement.insertAdjacentElement('beforebegin', newAuthorEntry())
+    })
+
     const newAuthorEntry = () => {
         const literalNameRow = element('div', {
             children: [
@@ -20,8 +25,7 @@ function makeCustomEntryInputs(makeOption) {
             className: 'separate-name',
             children: [
                 element('input', {placeholder: 'Forename (Ludwig)'}),
-                element('input', {placeholder: 'Dropping particle (van)'}),
-                element('input', {placeholder: 'Surname (Beethoven)'}),
+                element('input', {placeholder: 'Surname (van Beethoven)'}),
             ]
         })
 
@@ -38,18 +42,32 @@ function makeCustomEntryInputs(makeOption) {
                     .find(label => label.innerText === 'Name (Separate inputs)')
                     .querySelector('input').click()
                 element.querySelector(`.separate-name [placeholder="Forename (Ludwig)"]`).value = name.forename ?? ''
-                element.querySelector(`.separate-name [placeholder="Dropping particle (van)"]`).value = name.particle ?? ''
-                element.querySelector(`.separate-name [placeholder="Surname (Beethoven)"]`).value = name.surname ?? ''
+                element.querySelector(`.separate-name [placeholder="Surname (van Beethoven)"]`).value = name.surname ?? ''
             })
             setTimeout(() => tabsElement.remove())
             console.log(parsedNames)
         })
 
-        return makeTabs({
-            'Parse name': parsingNameRow,
-            'Literal name (Companies)': literalNameRow,
-            'Name (Separate inputs)': nameRow,
-        }, {className: ['row-direction', 'full-border', 'center-inner', 'author'].join(' ')})
+        const removeButton = element('button', {innerText: 'Remove'})
+
+        removeButton.addEventListener('click', () => {
+            authorElement.remove()
+        })
+
+        const authorElement = makeTabs(
+            {
+                'Parse name': parsingNameRow,
+                'Literal name (Companies)': literalNameRow,
+                'Name (Separate inputs)': nameRow,
+            },
+            {className: ['row-direction', 'full-border', 'center-inner', 'author'].join(' ')},
+            [element('div', {
+                className: 'set-left',
+                children: [removeButton]
+            })]
+        )
+
+        return authorElement
     }
 
     return [
@@ -82,6 +100,53 @@ function makeCustomEntryInputs(makeOption) {
                 }),
                 newAuthorEntry(),
                 addButton
+            ]
+        }),
+        element('div', {
+            children: [
+                element('input', {
+                    placeholder: 'ISBN'
+                }),
+                element('span', {
+                    innerText: ' / ',
+                }),
+                element('input', {
+                    placeholder: 'ISSN'
+                }),
+            ]
+        }),
+        element('div', {
+            children: [
+                element('input', {
+                    placeholder: 'Publisher'
+                }),
+                element('input', {
+                    placeholder: 'Publisher place'
+                }),
+            ]
+        }),
+        element('div', {
+            children: [
+                element('input', {
+                    placeholder: 'Issue'
+                }),
+                element('input', {
+                    placeholder: 'Volume'
+                }),
+                element('span', {
+                    innerText: ' – ',
+                }),
+                element('input', {
+                    placeholder: 'Page ("2" or "2-3")'
+                }),
+            ]
+        }),
+        element('div', {
+            children: [
+                element('input', {
+                    type: 'url',
+                    placeholder: 'URL',
+                }),
             ]
         }),
     ]

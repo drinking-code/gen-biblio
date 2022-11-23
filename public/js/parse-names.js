@@ -88,14 +88,16 @@ function parseName(fullName) {
                 particle = splitName.shift()
             }
             surname = splitName.shift()
+            surname = [particle, surname].filter(v => v).join(' ')
             forename = [...splitName].join(' ')
         } else { // forenames (probably) at beginning
             surname = splitName.pop()
             if (surnameParticles.includes(splitName[splitName.length - 1])) {
                 particle = splitName.pop()
             }
+            surname = [particle, surname].filter(v => v).join(' ')
             forename = [...splitName].join(' ')
         }
     }
-    return {forename, particle, surname}
+    return {forename, surname}
 }
