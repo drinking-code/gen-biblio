@@ -17,6 +17,7 @@ function makeCustomEntryInputs(makeOption) {
             ]
         })
         const nameRow = element('div', {
+            className: 'separate-name',
             children: [
                 element('input', {placeholder: 'Forename (Ludwig)'}),
                 element('input', {placeholder: 'Dropping particle (van)'}),
@@ -32,15 +33,15 @@ function makeCustomEntryInputs(makeOption) {
             }
             parsedNames.map(name => {
                 const element = newAuthorEntry()
-                console.log(element)
-                console.log(Array.from(element.querySelectorAll('label'))
-                    .find(label => label.innerText === 'Name (Separate inputs)'))
-                console.log(Array.from(element.querySelectorAll('label'))
-                    .find(label => label.innerText === 'Name (Separate inputs)')
-                    .querySelector('input'))
                 tabsElement.insertAdjacentElement('beforebegin', element)
+                Array.from(element.querySelectorAll('label'))
+                    .find(label => label.innerText === 'Name (Separate inputs)')
+                    .querySelector('input').click()
+                element.querySelector(`.separate-name [placeholder="Forename (Ludwig)"]`).value = name.forename ?? ''
+                element.querySelector(`.separate-name [placeholder="Dropping particle (van)"]`).value = name.particle ?? ''
+                element.querySelector(`.separate-name [placeholder="Surname (Beethoven)"]`).value = name.surname ?? ''
             })
-            // tabsElement.remove()
+            setTimeout(() => tabsElement.remove())
             console.log(parsedNames)
         })
 
