@@ -79,7 +79,14 @@ function getFormattedCitationFromDOI(doi, id, style, locale) {
     })
         .catch(err => console.log("Unable to fetch -", err))
         .then(async response => {
-            if (response.status !== 200) return false
+            if (response.status === 404) {
+                console.error(`DOI: ${doi} Not found`)
+                return false
+            }
+            if (response.status !== 200) {
+                console.error(await response.text())
+                return false
+            }
             const formattedCitation = await response.text()
 
             addRenderedEntry({id, locale, style, formattedCitation})

@@ -43,7 +43,8 @@ function makeFileLoadedForm(data) {
             innerText: 'Delete'
         })
         deleteButton.addEventListener('click', async () => {
-            const formatted = entryTable.entries[id][citationColumnName].substring(0, 20) + '...'
+            const formattedRaw = entryTable.entries[id][citationColumnName]
+            const formatted = (typeof formattedRaw === 'string' ? formattedRaw : formattedRaw.innerText).substring(0, 20) + '...'
             if (!confirm(`Are you sure you want to remove? (${formatted}; ${entryTable.entries[id]['DOI']})`)) return
             hideButton.style.pointerEvents = 'none'
             entryTable.markEntry(id, 'hidden')

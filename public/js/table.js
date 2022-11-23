@@ -114,7 +114,9 @@ class Table {
         this.sortedBy = column
         this.sortedReverse = reverse
         let sorted = Array.from(Object.entries(this.entries)).sort(([idA, entryA], [idB, entryB]) => {
-            return entryA[column].localeCompare(entryB[column])
+            const aCol = (entryA[column] === Table.defer) ? '' : entryA[column]
+            const bCol = (entryB[column] === Table.defer) ? '' : entryB[column]
+            return aCol.localeCompare(bCol)
         })
         if (reverse)
             sorted = sorted.reverse()
