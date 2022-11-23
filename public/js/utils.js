@@ -32,7 +32,7 @@ function element(tag, attributes, appendTo) {
     return el
 }
 
-function makeTabs(data, attributes) {
+function makeTabs(data, attributes, appendElements = []) {
     Array.from(Object.values(data)).forEach((el, i) => {
         if (i === 0) return
         el.style.display = 'none'
@@ -65,7 +65,8 @@ function makeTabs(data, attributes) {
         ...attributes,
         children: [
             element('div', {children: tabElements}),
-            ...Array.from(Object.values(data))
+            ...Array.from(Object.values(data)),
+            ...appendElements,
         ]
     })
 }

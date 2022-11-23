@@ -21,20 +21,24 @@ function makeNoLoadedFileForm() {
 function makeFileLoadedForm(data) {
     const citationColumnName = 'Formatted Citation'
     clearBody()
-    const submitButton = element('button', {innerText: 'Add new entry'})
+    const doiSubmitButton = element('button', {innerText: 'Add new entry'})
+    const customSubmitButton = doiSubmitButton.cloneNode(true)
     const doiInput = element('input', {placeholder: 'DOI'})
-    pressButtonOnEnter(doiInput, submitButton)
+    pressButtonOnEnter(doiInput, doiSubmitButton)
     const inputTypes = {
-        'DOI': element('div', {
-            children: [doiInput, submitButton]
+        'Custom (Book, Article without DOI, etc.)': element('div', {
+            children: [
+                ...makeCustomEntryInputs(makeOption),
+                customSubmitButton
+            ]
         }),
-        'Custom (Book, Article without DOI, etc.)': element('div', {})
+        'DOI': element('div', {
+            children: [doiInput, doiSubmitButton]
+        }),
     }
 
     function newOptions(id, options) {
-        const {
-            hidden
-        } = {
+        const {hidden} = {
             hidden: false,
             ...options
         }
@@ -70,7 +74,7 @@ function makeFileLoadedForm(data) {
         ]
     }
 
-    submitButton.addEventListener('click', async () => {
+    doiSubmitButton.addEventListener('click', async () => {
         const id = window.crypto.randomUUID()
         const pureDOI = doiInput.value.replace(/^(https?:\/\/(www\.)?doi\.org\/)?(.+)/, '$3')
         if (entryTable.hasInColumn('DOI', pureDOI)) {
