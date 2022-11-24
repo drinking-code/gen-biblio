@@ -128,5 +128,6 @@ class Table {
         sortedIds.forEach(id => {
             this.element.append(this.entryElements[id])
         })
+        this.sortedIds = sortedIds
     }
 }

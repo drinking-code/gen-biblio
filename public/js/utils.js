@@ -12,6 +12,7 @@ function element(tag, attributes, appendTo) {
             if (Array.isArray(attributes[key])
                 || attributes[key] instanceof NodeList
                 || attributes[key] instanceof HTMLCollection) {
+                console.log(attributes[key])
                 attributes[key].forEach(child => el.appendChild(child))
             } else if (
                 attributes[key] instanceof Node

@@ -28,8 +28,18 @@ body {
     color: var(--text);
 
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-auto-rows: min-content min-content 1fr;
+}
+
+body .input-section:first-of-type,
+body .entries {
+    grid-column: 1/3;
+}
+
+.generate-section {
+    display: flex;
+    justify-content: flex-end;
 }
 
 .suffix-json {
@@ -162,4 +172,56 @@ td.loading {
 
 .error {
     color: var(--red);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+
+    background: rgba(0, 0, 0, .5);
+
+    z-index: 10;
+}
+
+.bibliography-wrapper {
+    position: fixed;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+
+    height: 100vh;
+    width: 100vw;
+    max-height: 100rem;
+    max-width: 40em;
+
+    background: var(--background);
+    padding: 2em;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: min-content;
+}
+
+.bibliography-wrapper button:first-of-type {
+    justify-self: left;
+}
+
+.bibliography-wrapper button:last-of-type {
+    justify-self: right;
+}
+
+.bibliography-wrapper .bibliography {
+    grid-column: 1/3;
+
+    --indent: 2em;
+    padding-left: var(--indent);
+    text-indent: calc(var(--indent) * -1);
+    margin: .2em 0;
+}
+
+.bibliography-wrapper .bibliography:first-of-type {
+    margin-top: 1em;
 }
