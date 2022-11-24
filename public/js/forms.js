@@ -184,7 +184,9 @@ function makeFileLoadedForm(data) {
 
     const outputButton = element('button', {innerText: 'Generate Bibliography'})
     outputButton.addEventListener('click', () => {
-        const sortedFormattedCitations = entryTable.sortedIds.map(id => entryTable.entries[id][citationColumnName].trim())
+        const sortedFormattedCitations = entryTable.sortedIds
+            .filter(id => !entryTable.entryElements[id].classList.contains('hidden'))
+            .map(id => entryTable.entries[id][citationColumnName].trim())
         showBibliography(sortedFormattedCitations)
     })
     const outputButtonSection = element('div', {
