@@ -20,20 +20,22 @@ function makeNoLoadedFileForm() {
 
 function makeFileLoadedForm(data) {
     const citationColumnName = 'Formatted Citation'
+    const noDOICharacter = '—'
     clearBody()
     const doiSubmitButton = element('button', {innerText: 'Add new entry'})
     const customSubmitButton = doiSubmitButton.cloneNode(true)
     const doiInput = element('input', {placeholder: 'DOI'})
     pressButtonOnEnter(doiInput, doiSubmitButton)
+    const {clear: clearCustomEntryData, collectData: collectCustomEntryData, elements: customEntryElements} = makeCustomEntryInputs(makeOption)
     const inputTypes = {
-        'Custom (Book, Article without DOI, etc.)': element('div', {
-            children: [
-                ...makeCustomEntryInputs(makeOption),
-                customSubmitButton
-            ]
-        }),
         'DOI': element('div', {
             children: [doiInput, doiSubmitButton]
+        }),
+        'Custom (Book, Article without DOI, etc.)': element('div', {
+            children: [
+                ...customEntryElements,
+                customSubmitButton
+            ]
         }),
     }
 
@@ -106,6 +108,31 @@ function makeFileLoadedForm(data) {
         doiInput.value = ''
     })
 
+    customSubmitButton.addEventListener('click', async () => {
+        const id = window.crypto.randomUUID()
+        entryTable.addEntry({
+            'Options': newOptions(id),
+            'DOI': noDOICharacter,
+            [citationColumnName]: Table.defer,
+        }, id)
+        const collected = collectCustomEntryData()
+        const entryData = await addEntry({
+            id,
+            ...collected,
+            style: styleElement.value,
+            locale: localeElement.value,
+        })
+        entryTable.fill(id, citationColumnName, entryData.formattedCitation)
+        data.entries[id] = collected
+        data.rendered.push({
+            id,
+            style: styleElement.value,
+            locale: localeElement.value,
+            formattedCitation: entryData.formattedCitation,
+        })
+        clearCustomEntryData()
+    })
+
     const newThingSection = makeTabs(inputTypes, {className: 'input-section'})
     document.body.append(newThingSection)
 
@@ -165,7 +192,7 @@ function makeFileLoadedForm(data) {
             citation = formatted.formattedCitation
         entryTable.addEntry({
             'Options': newOptions(id, {hidden: entry.hidden}),
-            'DOI': entry.doi,
+            'DOI': entry.doi ?? noDOICharacter,
             [citationColumnName]: citation,
         }, id)
         if (entry.hidden)

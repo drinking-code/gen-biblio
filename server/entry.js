@@ -1,4 +1,5 @@
 const {writeFile, addEntry, removeEntry, addRenderedEntry, getEntry, searchEntries} = require('./current')
+const {styleWith} = require('./csl')
 
 async function handleEntry(req, res) {
     if (req.method.toLowerCase() === 'put') {
@@ -22,6 +23,31 @@ async function handleEntry(req, res) {
                     type: body.type,
                     doi: body.doi.replace(/^(https?:\/\/(www\.)?doi\.org\/)?(.+)/, '$3'),
                     hidden: body.hidden || false
+                })
+                writeFile()
+
+                return res.end()
+            } else {
+                const responseData = {}
+                const {style, locale, hidden, id} = body
+                delete body.style
+                delete body.locale
+                delete body.hidden
+                responseData.formattedCitation = await styleWith(body, style, locale)
+
+                res.setHeader('Content-Type', 'application/json')
+                res.write(JSON.stringify(responseData))
+
+                delete body.id
+                addEntry(id, {
+                    type: body.type,
+                    hidden: body.hidden || false,
+                    ...body,
+                })
+                addRenderedEntry({
+                    id,
+                    locale, style,
+                    formattedCitation: responseData.formattedCitation,
                 })
                 writeFile()
 

@@ -22,6 +22,8 @@ npx github:drinking-code/gen-biblio path/to/your/file.json
 
 ### Adding a DOI entry
 
+> Choose the style and locale first.
+
 To add an entry, enter a DOI or the DOI url, and hit enter. The program will automatically fetch the data and the
 appropriate citation for you. This may take a couple seconds, the DOI are slow (lol).
 

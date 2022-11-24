@@ -35,23 +35,36 @@ function getFile(onNoFile) {
     return genericRequest('/current', {}, {'default': onNoFile})
 }
 
-function addEntry({id, doi, hidden, style, locale}) {
+function addEntry(
+    {
+        id, style, locale,
+        doi, hidden,
+        type, title, issued, accessed, author, isbn, issn, publisher, publisherPlace, issue, volume, page, url,
+    }) {
     return genericRequest('/entry', {
         method: 'put',
         body: JSON.stringify({
-            type: 'doi',
+            type: doi ? 'doi' : type,
             id, style, locale,
-            doi, hidden
+            doi, hidden,
+            title, issued, accessed, author, isbn, issn, publisher, publisherPlace, issue, volume, page, url,
+            'container-title': publisher,
         })
     })
 }
 
-function updateEntry({id, hidden}) {
+function updateEntry(
+    {
+        id, hidden,
+        title, issued, accessed, author, isbn, issn, publisher, publisherPlace, issue, volume, page, url,
+    }) {
     return genericRequest('/entry', {
         method: 'PATCH',
         body: JSON.stringify({
             id,
-            hidden
+            hidden,
+            title, issued, accessed, author, isbn, issn, publisher, publisherPlace, issue, volume, page, url,
+            'container-title': publisher,
         })
     })
 }
