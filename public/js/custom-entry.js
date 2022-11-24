@@ -45,7 +45,6 @@ function makeCustomEntryInputs(makeOption) {
                 element.querySelector(`.separate-name [placeholder="Surname (van Beethoven)"]`).value = name.surname ?? ''
             })
             setTimeout(() => tabsElement.remove())
-            console.log(parsedNames)
         })
 
         const removeButton = element('button', {innerText: 'Remove'})

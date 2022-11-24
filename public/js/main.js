@@ -1,2 +1,1 @@
-getFile(makeNoLoadedFileForm)
-    .then(makeFileLoadedForm)
+getFile(makeFileLoadedForm, makeNoLoadedFileForm)

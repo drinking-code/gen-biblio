@@ -13,7 +13,7 @@ function genericRequest(url, options = {}, statusCodeCallbacks = {}) {
         },
     }
     return fetch(url, options)
-        .catch(err => console.error(err))
+        .catch(err => 0)
         .then(async res => {
             if (statusCodeCallbacks[res.status])
                 return await statusCodeCallbacks[res.status](res)
@@ -31,8 +31,11 @@ function createFile(name) {
     })
 }
 
-function getFile(onNoFile) {
-    return genericRequest('/current', {}, {'default': onNoFile})
+function getFile(onFile, onNoFile) {
+    return genericRequest('/current', {}, {
+        200: async res => onFile(await res.json()),
+        'default': onNoFile
+    })
 }
 
 function addEntry(
