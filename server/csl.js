@@ -46,6 +46,8 @@ async function styleWith(data, style, locale) {
         .replace(/<[^>]+>/g, '')
         // remove double spaces
         .replace(/ +/g, ' ')
+        // replace &#38; with "&"
+        .replace(/&#38;/g, '&')
         .trim()
     return cleanedUp
 }

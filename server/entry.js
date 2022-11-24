@@ -64,7 +64,16 @@ async function handleEntry(req, res) {
             return res.end()
         }
         const responseData = {}
-        responseData.formattedCitation = await getFormattedCitationFromDOI(entry.doi, id, style, locale)
+        if (entry.doi) {
+            responseData.formattedCitation = await getFormattedCitationFromDOI(entry.doi, id, style, locale)
+        } else {
+            responseData.formattedCitation = await styleWith(entry, style, locale)
+            addRenderedEntry({
+                id,
+                locale, style,
+                formattedCitation: responseData.formattedCitation,
+            })
+        }
 
         res.setHeader('Content-Type', 'application/json')
         res.write(JSON.stringify(responseData))

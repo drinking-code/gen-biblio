@@ -99,6 +99,9 @@ class Table {
             cellElement.append(value)
         }
         cellElement.classList.remove('loading')
+
+        if (column === this.sortedBy)
+            this.sort(this.sortedBy, this.sortedReverse)
     }
 
     hasInColumn(column, value) {
