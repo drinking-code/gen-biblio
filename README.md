@@ -1,3 +1,6 @@
+> **Warning**
+> Archived. Use [Zotero](https://www.zotero.org) instead
+
 # Generate Bibliographies
 
 So, I use pages and find it repugnant that one has to purchase a more-than-200-euros expensive program to create a
